@@ -3,6 +3,7 @@ import logging
 import asyncio
 import discord
 import json
+import sys
 
 from bot.bot_client import Bot
 
