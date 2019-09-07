@@ -12,7 +12,7 @@ def load_settings() -> dict:
 
     Example settings file at 'settings.example.json'
     """
-    with open('settings.json', 'r') as f:
+    with open('bot/settings.json', 'r') as f:
         return json.load(f)
 
 

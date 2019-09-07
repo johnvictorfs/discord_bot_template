@@ -9,7 +9,7 @@ from pathlib import Path
 import discord
 from discord.ext import commands
 
-from talk_bot.orm.models import db
+from bot.orm.models import db
 
 
 class Bot(commands.Bot):
