@@ -31,22 +31,63 @@ class Bot(commands.Bot):
         await self.wait_until_ready()
         self.start_time = datetime.datetime.utcnow()
 
+    @staticmethod
+    def get_cogs():
+        """Gets cog names from /cogs/ folder"""
+        not_extensions = ['utils', 'embeds', 'models', '__init__']
+        cogs = [x.stem for x in Path('bot/cogs').glob('*.py')]
+        for cog in cogs:
+            if cog in not_extensions:
+                cogs.remove(cog)
+        return cogs
+
+    async def unload_all_extensions(self):
+        """Unloads all cog extensions"""
+        errored = False
+        for extension in self.get_cogs():
+            try:
+                self.unload_extension(f'bot.cogs.{extension}')
+                print(f'- Unloaded extension {extension}')
+            except Exception as e:
+                error = f'{extension}:\n {type(e).__name__} : {e}'
+                print(f'Failed to unload extension {error}')
+                errored = True
+        return errored
+
     async def load_all_extensions(self):
-        """
-        Attempts to load all .py files in /cogs/ as cog extensions
-        """
+        """Attempts to load all .py files in /cogs/ as cog extensions"""
         await self.wait_until_ready()
         await asyncio.sleep(1)  # ensure that on_ready has completed and finished printing
-        disabled = ['__init__']
-        cogs = [x.stem for x in Path('bot/cogs').glob('*.py') if x.stem not in disabled]
-        for extension in cogs:
-            try:
-                self.load_extension(f'bot.cogs.{extension}')
-                print(f'Loaded extension: {extension}')
-            except Exception as e:
-                error = f'{extension}\n {type(e).__name__} : {e}'
-                print(f'Failed to load extension {error}')
-            print('-' * 10)
+        errored = False
+        for extension in self.get_cogs():
+            if extension not in self.setting.disabled_extensions:
+                try:
+                    self.load_extension(f'bot.cogs.{extension}')
+                    print(f'- loaded Extension: {extension}')
+                except Exception as e:
+                    error = f'{extension}:\n {type(e).__name__} : {e}'
+                    print(f'Failed to load extension {error}')
+                    errored = True
+        print('-' * 10)
+        self.disabled_commands()
+        return errored
+
+    async def reload_all_extensions(self):
+        """Attempts to reload all .py files in /cogs/ as cog extensions"""
+        await self.wait_until_ready()
+        await asyncio.sleep(1)  # ensure that on_ready has completed and finished printing
+        errored = False
+        for extension in self.get_cogs():
+            if extension not in self.setting.disabled_extensions:
+                try:
+                    self.reload_extension(f'bot.cogs.{extension}')
+                    print(f'- reloaded Extension: {extension}')
+                except Exception as e:
+                    error = f'{extension}:\n {type(e).__name__} : {e}'
+                    print(f'Failed to reload extension {error}')
+                    errored = True
+        print('-' * 10)
+        return errored
 
     async def on_ready(self):
         """

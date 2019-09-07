@@ -8,7 +8,7 @@ class Owner(commands.Cog):
     def __init__(self, bot: Bot):
         self.bot = bot
 
-    @commands.has_permissions(manage_server=True)
+    @commands.has_permissions(manage_guild=True)
     @commands.command(aliases=['reload'])
     async def reload_cog(self, ctx: commands.Context, cog: str):
         """Reloads a cog"""
@@ -20,7 +20,7 @@ class Owner(commands.Cog):
         except Exception as e:
             return await ctx.send(f'Error loading extension {cog}:\n {type(e).__name__} : {e}')
 
-    @commands.has_permissions(manage_server=True)
+    @commands.has_permissions(manage_guild=True)
     @commands.command(aliases=['reloadall'])
     async def reload_all_cogs(self, ctx: commands.Context):
         """Reloads all cogs"""
