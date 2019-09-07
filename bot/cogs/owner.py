@@ -28,3 +28,7 @@ class Owner(commands.Cog):
         if err:
             return await ctx.send('Error when reloading extensions. Check the bot logs.')
         return await ctx.send('All extensions were reloaded successfully.')
+
+
+def setup(bot):
+    bot.add_cog(Owner(bot))

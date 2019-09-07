@@ -38,10 +38,10 @@ class Bot(commands.Bot):
         await self.wait_until_ready()
         await asyncio.sleep(1)  # ensure that on_ready has completed and finished printing
         disabled = ['__init__']
-        cogs = [x.stem for x in Path('cogs').glob('*.py') if x.stem not in disabled]
+        cogs = [x.stem for x in Path('bot/cogs').glob('*.py') if x.stem not in disabled]
         for extension in cogs:
             try:
-                self.load_extension(f'cogs.{extension}')
+                self.load_extension(f'bot.cogs.{extension}')
                 print(f'Loaded extension: {extension}')
             except Exception as e:
                 error = f'{extension}\n {type(e).__name__} : {e}'
