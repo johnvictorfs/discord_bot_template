@@ -54,11 +54,15 @@ class Bot(commands.Bot):
         """
         print('-' * 10)
         self.app_info = await self.application_info()
-        print(f'Logged in as: {self.user.name}\n'
-              f'Using discord.py version: {discord.__version__}\n'
-              f'Owner: {self.app_info.owner}\n'
-              f'Prefix: {self.settings.get("prefix")}\n'
-              f'Template Maker: SourSpoon / Spoon#7805')
+        print(
+            f'Logged in as: {self.user.name}\n'
+            f'Using discord.py version: {discord.__version__}\n'
+            f'Owner: {self.app_info.owner}\n'
+            f'Prefix: {self.settings.get("prefix")}\n'
+            f'Original Template Maker: SourSpoon / Spoon#7805\n'
+            f'Updated by: https: // github.com/johnvictorfs\n
+            f'Template available at: https://github.com/johnvictorfs/discord_bot_template'
+        )
         print('-' * 10)
 
     async def on_message(self, message: discord.Message):
