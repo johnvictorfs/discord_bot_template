@@ -1,5 +1,3 @@
-import re
-
 from discord.ext import commands
 
 
@@ -14,7 +12,6 @@ class CogExample(commands.Cog):
         """
         Example command
         """
-        pass
 
 
 def setup(bot):
