@@ -60,7 +60,7 @@ class Bot(commands.Bot):
             f'Owner: {self.app_info.owner}\n'
             f'Prefix: {self.settings.get("prefix")}\n'
             f'Original Template Maker: SourSpoon / Spoon#7805\n'
-            f'Updated by: https: // github.com/johnvictorfs\n
+            f'Updated by: https: // github.com/johnvictorfs\n'
             f'Template available at: https://github.com/johnvictorfs/discord_bot_template'
         )
         print('-' * 10)
