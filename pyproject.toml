@@ -6,7 +6,7 @@ authors = ["John Victor <johnvictorfs@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.6"
-"discord.py" = {git = "https://github.com/Rapptz/discord.py.git", branch = "rewrite"}
+"discord.py" = "^1.2.3"
 peewee = "^3.8"
 psycopg2-binary = "^2.7"
 
