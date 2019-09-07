@@ -11,7 +11,7 @@
 - Dependencies are present in the `pyproject.toml` file and can be easily installed with [`poetry`](https://github.com/sdispater/poetry) with `$ poetry install`
 
 - Rename [`bot/orm/db_credentials.example.json`](bot/orm/db_credentials.example.json) to `db_credentials.json` and put in the database credentials for a Postgres database
-    - Or, if you wish to use a Sqlite database, uncomment the `db = peewee.SqliteDatabase('bot.db')` line at [`bot/orm/models.py`](bot/orm/models.py)
+    - Or, if you wish to use a Sqlite database, uncomment the `db = peewee.SqliteDatabase('bot.db')` line at [`bot/orm/models.py`](bot/orm/db.py)
 
 - Rename [`bot/settings.example.json`](bot/settings.example.json) to `settings.json` and edit in the needed fields
 
