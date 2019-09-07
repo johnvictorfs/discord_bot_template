@@ -60,14 +60,13 @@ class Bot(commands.Bot):
         await asyncio.sleep(1)  # ensure that on_ready has completed and finished printing
         errored = False
         for extension in self.get_cogs():
-            if extension not in self.setting.disabled_extensions:
-                try:
-                    self.load_extension(f'bot.cogs.{extension}')
-                    print(f'- loaded Extension: {extension}')
-                except Exception as e:
-                    error = f'{extension}:\n {type(e).__name__} : {e}'
-                    print(f'Failed to load extension {error}')
-                    errored = True
+            try:
+                self.load_extension(f'bot.cogs.{extension}')
+                print(f'- loaded Extension: {extension}')
+            except Exception as e:
+                error = f'{extension}:\n {type(e).__name__} : {e}'
+                print(f'Failed to load extension {error}')
+                errored = True
         print('-' * 10)
         self.disabled_commands()
         return errored
@@ -78,14 +77,13 @@ class Bot(commands.Bot):
         await asyncio.sleep(1)  # ensure that on_ready has completed and finished printing
         errored = False
         for extension in self.get_cogs():
-            if extension not in self.setting.disabled_extensions:
-                try:
-                    self.reload_extension(f'bot.cogs.{extension}')
-                    print(f'- reloaded Extension: {extension}')
-                except Exception as e:
-                    error = f'{extension}:\n {type(e).__name__} : {e}'
-                    print(f'Failed to reload extension {error}')
-                    errored = True
+            try:
+                self.reload_extension(f'bot.cogs.{extension}')
+                print(f'- reloaded Extension: {extension}')
+            except Exception as e:
+                error = f'{extension}:\n {type(e).__name__} : {e}'
+                print(f'Failed to reload extension {error}')
+                errored = True
         print('-' * 10)
         return errored
 
