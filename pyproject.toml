@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "talk-bot"
+name = "discord_bot_template"
 version = "0.1.0"
 description = ""
 authors = ["John Victor <johnvictorfs@gmail.com>"]

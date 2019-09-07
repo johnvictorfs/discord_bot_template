@@ -8,10 +8,11 @@ class CogExample(commands.Cog):
 
     @commands.has_permissions(manage_channels=True)
     @commands.command(aliases=['example'])
-    async def example_command(self, ctx: commands.Context):
+    async def pinto(self, ctx: commands.Context, *, args: str):
         """
         Example command
         """
+        await ctx.send(args)
 
 
 def setup(bot):
