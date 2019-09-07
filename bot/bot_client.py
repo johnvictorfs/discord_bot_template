@@ -68,7 +68,6 @@ class Bot(commands.Bot):
                 print(f'Failed to load extension {error}')
                 errored = True
         print('-' * 10)
-        self.disabled_commands()
         return errored
 
     async def reload_all_extensions(self):
