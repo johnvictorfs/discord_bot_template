@@ -13,7 +13,7 @@ from bot.settings import Settings, load_settings
 install()
 
 
-async def run(settings: Settings) -> None:
+async def run(settings: Settings):
     bot = Bot(settings=settings)
 
     try:
@@ -24,7 +24,8 @@ async def run(settings: Settings) -> None:
         print("[red]Error: Invalid Token. Please input a valid token in '/bot/settings.json' file.[/red]")
         sys.exit(1)
 
-if __name__ == '__main__':
+
+def setup_and_run():
     logger = logging.getLogger('discord')
     logger.setLevel(logging.INFO)
 
@@ -36,3 +37,7 @@ if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     settings = load_settings()
     loop.run_until_complete(run(settings))
+
+
+if __name__ == '__main__':
+    setup_and_run()
