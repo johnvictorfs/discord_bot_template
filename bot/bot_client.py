@@ -1,20 +1,19 @@
-import re
-import sys
-import json
 import asyncio
-import logging
 import datetime
 from pathlib import Path
 
 import discord
 from discord.ext import commands
+from rich import print
+from rich.table import Table
 
 from bot.orm.models import db
+from bot.settings import Settings
 
 
 class Bot(commands.Bot):
-    def __init__(self, settings: dict):
-        super().__init__(command_prefix=settings.get('prefix'), case_insensitive=True)
+    def __init__(self, settings: Settings):
+        super().__init__(command_prefix=settings['prefix'], case_insensitive=True)
         self.settings = settings
         self.start_time = None
         self.app_info = None
@@ -34,74 +33,83 @@ class Bot(commands.Bot):
     @staticmethod
     def get_cogs():
         """Gets cog names from /cogs/ folder"""
-        not_extensions = ['utils', 'embeds', 'models', '__init__']
-        cogs = [x.stem for x in Path('bot/cogs').glob('*.py')]
-        for cog in cogs:
-            if cog in not_extensions:
-                cogs.remove(cog)
-        return cogs
+        not_extensions = ['__init__']
 
-    async def unload_all_extensions(self):
+        return [x.stem for x in Path('bot/cogs').glob('*.py') if x.stem not in not_extensions]
+
+    async def unload_all_extensions(self) -> bool:
         """Unloads all cog extensions"""
+
         errored = False
+
         for extension in self.get_cogs():
             try:
                 self.unload_extension(f'bot.cogs.{extension}')
-                print(f'- Unloaded extension {extension}')
+                print(f'[green]• Unloaded extension {extension}[/green]')
             except Exception as e:
                 error = f'{extension}:\n {type(e).__name__} : {e}'
-                print(f'Failed to unload extension {error}')
+                print(f'[red]• Failed to unload extension {error}[/red]')
                 errored = True
+
         return errored
 
-    async def load_all_extensions(self):
+    async def load_all_extensions(self) -> bool:
         """Attempts to load all .py files in /cogs/ as cog extensions"""
+
         await self.wait_until_ready()
         await asyncio.sleep(1)  # ensure that on_ready has completed and finished printing
+
         errored = False
         for extension in self.get_cogs():
             try:
                 self.load_extension(f'bot.cogs.{extension}')
-                print(f'- loaded Extension: {extension}')
+                print(f'[green]• Loaded Extension: {extension}[/green]')
             except Exception as e:
                 error = f'{extension}:\n {type(e).__name__} : {e}'
-                print(f'Failed to load extension {error}')
+                print(f'[red]• Failed to load extension {error}[/red]')
                 errored = True
-        print('-' * 10)
+
+        print('[green bold]Finished loading all extensions.[/green bold]')
         return errored
 
-    async def reload_all_extensions(self):
+    async def reload_all_extensions(self) -> bool:
         """Attempts to reload all .py files in /cogs/ as cog extensions"""
+
         await self.wait_until_ready()
         await asyncio.sleep(1)  # ensure that on_ready has completed and finished printing
+
         errored = False
+
         for extension in self.get_cogs():
             try:
                 self.reload_extension(f'bot.cogs.{extension}')
-                print(f'- reloaded Extension: {extension}')
+                print(f'[green]• reloaded Extension: {extension}[/green]')
             except Exception as e:
                 error = f'{extension}:\n {type(e).__name__} : {e}'
-                print(f'Failed to reload extension {error}')
+                print(f'[red]• Failed to reload extension {error}[/red]')
                 errored = True
-        print('-' * 10)
+
         return errored
 
     async def on_ready(self):
         """
         This event is called every time the bot connects or resumes connection.
         """
-        print('-' * 10)
+
         self.app_info = await self.application_info()
-        print(
-            f'Logged in as: {self.user.name}\n'
-            f'Using discord.py version: {discord.__version__}\n'
-            f'Owner: {self.app_info.owner}\n'
-            f'Prefix: {self.settings.get("prefix")}\n'
-            f'Original Template Maker: SourSpoon / Spoon#7805\n'
-            f'Updated by: https://github.com/johnvictorfs\n'
-            f'Template available at: https://github.com/johnvictorfs/discord_bot_template'
-        )
-        print('-' * 10)
+
+        table = Table(title='Bot Information')
+
+        table.add_column('', style='bold')
+        table.add_column('')
+
+        table.add_row('Bot User', self.user.name)
+        table.add_row('discord.py', discord.__version__)
+        table.add_row('Owner', str(self.app_info.owner))
+        table.add_row('Prefix', self.settings['prefix'])
+        table.add_row('Template URL', 'https://github.com/johnvictorfs/discord_bot_template')
+
+        print(table)
 
     async def on_message(self, message: discord.Message):
         """
@@ -111,32 +119,6 @@ class Bot(commands.Bot):
             return  # Ignore all bot messages
 
         await self.process_commands(message)
-
-    async def send_logs(self, e: Exception, tb: str, ctx: commands.Context = None):
-        """
-        Sends logs of errors to the bot's instance owner as a private Discord message
-        """
-        owner = self.app_info.owner
-        separator = ("_\\" * 15) + "_"
-        info_embed = None
-        if ctx:
-            info_embed = discord.Embed(title="__Error Info__", color=discord.Color.dark_red())
-            info_embed.add_field(name="Message", value=ctx.message.content, inline=False)
-            info_embed.add_field(name="By", value=ctx.author, inline=False)
-            info_embed.add_field(name="In Guild", value=ctx.guild, inline=False)
-            info_embed.add_field(name="In Channel", value=ctx.channel, inline=False)
-        try:
-            await owner.send(content=f"{separator}\n**{e}:**\n```python\n{tb}```", embed=info_embed)
-        except discord.errors.HTTPException:
-            logging.error(f"{e}: {tb}")
-            try:
-                await owner.send(
-                    content=f"(Sending first 500 chars of traceback, too long)\n{separator}\n**{e}:**"
-                    f"\n```python\n{tb[:500]}```",
-                    embed=info_embed
-                )
-            except Exception:
-                await owner.send(content="Error trying to send error logs.", embed=info_embed)
 
     @staticmethod
     def db_setup():
