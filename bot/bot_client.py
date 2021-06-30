@@ -23,16 +23,24 @@ class Bot(commands.Bot):
         self.loop.create_task(self.track_start())
         self.loop.create_task(self.load_all_extensions())
 
+    def print_success(self, stdout: str):
+        print(f'[green bold]•[/green bold] {stdout}')
+
+    def print_error(self, stdout: str):
+        print(f'[red bold]•[/red bold] {stdout}')
+
     async def track_start(self):
         """
-        Waits for the bot to connect to discord and then records the time
+        Waits for the bot to connect to discord and records when it happened
         """
+
         await self.wait_until_ready()
         self.start_time = datetime.datetime.utcnow()
 
     @staticmethod
     def get_cogs():
         """Gets cog names from /cogs/ folder"""
+
         not_extensions = ['__init__']
 
         return [x.stem for x in Path('bot/cogs').glob('*.py') if x.stem not in not_extensions]
@@ -45,10 +53,10 @@ class Bot(commands.Bot):
         for extension in self.get_cogs():
             try:
                 self.unload_extension(f'bot.cogs.{extension}')
-                print(f'[green]• Unloaded extension {extension}[/green]')
+                self.print_success(f'Unloaded extension [cyan]{extension}[/cyan]')
             except Exception as e:
                 error = f'{extension}:\n {type(e).__name__} : {e}'
-                print(f'[red]• Failed to unload extension {error}[/red]')
+                self.print_error(f'Failed to unload extension [cyan]{extension}[/cyan]\n[red]{error}[/red]')
                 errored = True
 
         return errored
@@ -60,16 +68,18 @@ class Bot(commands.Bot):
         await asyncio.sleep(1)  # ensure that on_ready has completed and finished printing
 
         errored = False
+
         for extension in self.get_cogs():
             try:
                 self.load_extension(f'bot.cogs.{extension}')
-                print(f'[green]• Loaded Extension: {extension}[/green]')
+                self.print_success(f'Loaded extension [cyan]{extension}[/cyan]')
             except Exception as e:
                 error = f'{extension}:\n {type(e).__name__} : {e}'
-                print(f'[red]• Failed to load extension {error}[/red]')
+                self.print_error(f'Failed to load extension [cyan]{extension}[/cyan].\n[red]{error}[/red]')
                 errored = True
 
         print('[green bold]Finished loading all extensions.[/green bold]')
+
         return errored
 
     async def reload_all_extensions(self) -> bool:
@@ -83,10 +93,11 @@ class Bot(commands.Bot):
         for extension in self.get_cogs():
             try:
                 self.reload_extension(f'bot.cogs.{extension}')
-                print(f'[green]• reloaded Extension: {extension}[/green]')
+                self.success_success(f'Reloaded Extension [cyan]{extension}[/cyan].')
+
             except Exception as e:
                 error = f'{extension}:\n {type(e).__name__} : {e}'
-                print(f'[red]• Failed to reload extension {error}[/red]')
+                self.print_error(f'Failed to reload extension [cyan]{extension}[/cyan].\n[red]{error}[/red]')
                 errored = True
 
         return errored
@@ -98,10 +109,10 @@ class Bot(commands.Bot):
 
         self.app_info = await self.application_info()
 
-        table = Table(title='Bot Information')
+        table = Table(title=None)
 
         table.add_column('', style='bold')
-        table.add_column('')
+        table.add_column('Bot has successfully logged in')
 
         table.add_row('Bot User', self.user.name)
         table.add_row('discord.py', discord.__version__)
@@ -115,6 +126,7 @@ class Bot(commands.Bot):
         """
         This event triggers on every message received by the bot
         """
+
         if message.author.bot:
             return  # Ignore all bot messages
 
@@ -125,6 +137,7 @@ class Bot(commands.Bot):
         """
         Setup the bot's database, creates necessary tables if not yet created
         """
+
         db.connect()
         models = []  # Add bot.orm.models Models here
         db.create_tables(models)
