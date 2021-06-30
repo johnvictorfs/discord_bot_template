@@ -8,7 +8,6 @@ class CogExample(commands.Cog):
     def __init__(self, bot: Bot):
         self.bot = bot
 
-    @commands.has_permissions(manage_channels=True)
     @commands.command(aliases=['example'])
     async def example_command(self, ctx: commands.Context, *, args: str):
         """

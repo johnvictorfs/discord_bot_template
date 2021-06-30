@@ -54,7 +54,7 @@ jobs:
           poetry install
 
       - name: Run tests
-        run: poetry run pytest
+        run: poetry run python -m pytest -s
 
       - name: Lint
         run: |

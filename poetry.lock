@@ -115,6 +115,18 @@ mypy = ">=0.800"
 typing-extensions = ">=3.7.4,<4.0.0"
 
 [[package]]
+name = "dpytest"
+version = "0.5.2"
+description = "A package that assists in writing tests for discord.py"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+"discord.py" = "*"
+pytest-asyncio = "*"
+
+[[package]]
 name = "flake8"
 version = "3.9.2"
 description = "the modular source code checker: pep8 pyflakes and co"
@@ -173,7 +185,7 @@ python-versions = "*"
 name = "isort"
 version = "5.9.1"
 description = "A Python utility / library to sort Python imports."
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6.1,<4.0"
 
@@ -324,6 +336,20 @@ toml = "*"
 testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "requests", "xmlschema"]
 
 [[package]]
+name = "pytest-asyncio"
+version = "0.15.1"
+description = "Pytest support for asyncio."
+category = "dev"
+optional = false
+python-versions = ">= 3.6"
+
+[package.dependencies]
+pytest = ">=5.4.0"
+
+[package.extras]
+testing = ["coverage", "hypothesis (>=5.7.1)"]
+
+[[package]]
 name = "rich"
 version = "10.4.0"
 description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal"
@@ -370,7 +396,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "f6d470632d288a85a00630b7694bb03c41f579ecdcccee816c28aeac4ef73dc2"
+content-hash = "8329243751f67117b53398336340f0e0fb89d3a449cf41475e9e7fac0414b76e"
 
 [metadata.files]
 aiohttp = [
@@ -447,6 +473,10 @@ commonmark = [
 "discord.py-stubs" = [
     {file = "discord.py-stubs-1.7.3.tar.gz", hash = "sha256:d28d218540217794ff12b7c0afd8ee4d65fc91bd169c53475781ac99413819ec"},
     {file = "discord.py_stubs-1.7.3-py3-none-any.whl", hash = "sha256:ec6283e08beff4660c2d28a3fb48f501eb74988d8d6e5859b3838ac897016c95"},
+]
+dpytest = [
+    {file = "dpytest-0.5.2-py3-none-any.whl", hash = "sha256:0f0498ef923864e28cff53d1070529ef147244656a598f2c84dc2062988104b0"},
+    {file = "dpytest-0.5.2.tar.gz", hash = "sha256:21b80af5139a90741f7b357c44305b75fbc58ceb9148af5b683ff241417e9d9c"},
 ]
 flake8 = [
     {file = "flake8-3.9.2-py2.py3-none-any.whl", hash = "sha256:bf8fd333346d844f616e8d47905ef3a3384edae6b4e9beb0c5101e25e3110907"},
@@ -608,6 +638,10 @@ pyparsing = [
 pytest = [
     {file = "pytest-6.2.4-py3-none-any.whl", hash = "sha256:91ef2131a9bd6be8f76f1f08eac5c5317221d6ad1e143ae03894b862e8976890"},
     {file = "pytest-6.2.4.tar.gz", hash = "sha256:50bcad0a0b9c5a72c8e4e7c9855a3ad496ca6a881a3641b4260605450772c54b"},
+]
+pytest-asyncio = [
+    {file = "pytest-asyncio-0.15.1.tar.gz", hash = "sha256:2564ceb9612bbd560d19ca4b41347b54e7835c2f792c504f698e05395ed63f6f"},
+    {file = "pytest_asyncio-0.15.1-py3-none-any.whl", hash = "sha256:3042bcdf1c5d978f6b74d96a151c4cfb9dcece65006198389ccd7e6c60eb1eea"},
 ]
 rich = [
     {file = "rich-10.4.0-py3-none-any.whl", hash = "sha256:9fb2404c4e870d4de3837c11d0cd1f26c44725865535caba1379c2343a49f6a1"},
