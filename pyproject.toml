@@ -2,6 +2,9 @@
 name = "discord_bot_template"
 version = "0.1.0"
 description = ""
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/johnvictorfs/discord_bot_template"
 authors = ["John Victor <johnvictorfs@gmail.com>"]
 
 [tool.poetry.dependencies]

@@ -15,6 +15,7 @@ class CommandErrorHandler(commands.Cog):
         """
         This runs at the start of every command
         """
+
         await ctx.trigger_typing()
         time = datetime.datetime.utcnow()
         msg = f"'{ctx.command}' ran by '{ctx.author}' as '{ctx.invoked_with}' at {time}. with '{ctx.message.content}'"
@@ -22,18 +23,18 @@ class CommandErrorHandler(commands.Cog):
 
         return True
 
+    # flake8: noqa: C901
     @commands.Cog.listener()
     async def on_command_error(self, ctx: commands.Context, error: Exception):
         """
         Runs on every uncaught exception that happens in a Cog at Runtime
 
         Tries to deal with most of actual discord.py errors, otherwise sends a
-        default error message and then sends traceback and error name to the
-        Bot's owner (by a Discord private message)
+        default error message and error traceback to some specific error tracker
         """
 
         if hasattr(ctx.command, 'on_error'):
-            # Command already has local error handler, not necessary to handle here
+            # Command already has local error handler, it's not necessary to handle it here
             return
 
         # Use original error caught instead of the one caught by the Error Handler if it exists
