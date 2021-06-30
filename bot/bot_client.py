@@ -12,8 +12,19 @@ from bot.settings import Settings
 
 
 class Bot(commands.Bot):
-    def __init__(self, settings: Settings):
-        super().__init__(command_prefix=settings['prefix'], case_insensitive=True)
+    def __init__(self, settings: Settings, loop: asyncio.AbstractEventLoop = None):
+        intents = discord.Intents.default()
+        intents.members = True
+
+        if loop:
+            self.loop = loop
+
+        super().__init__(
+            command_prefix=settings['prefix'],
+            case_insensitive=True,
+            intents=intents
+        )
+
         self.settings = settings
         self.start_time = None
         self.app_info = None
