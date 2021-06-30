@@ -106,12 +106,11 @@ venv.bak/
 .mypy_cache/
 
 # Setting files
-settings.json
+bot/settings.json
 db_credentials.json
 
 # Editor files
 .idea/
-.vscode/
 
 # Database files
 *.db
