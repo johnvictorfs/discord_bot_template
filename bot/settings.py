@@ -1,5 +1,8 @@
 import json
+import sys
 from typing import TypedDict
+
+from rich import print
 
 
 class Settings(TypedDict):
@@ -13,5 +16,12 @@ def load_settings() -> Settings:
 
     Example settings file at 'settings.example.json'
     """
-    with open('bot/settings.json', 'r') as f:
-        return json.load(f)
+    try:
+        with open('bot/settings.json', 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print(
+            '[red]Error: No settings file found. '
+            "Create a '/bot/settings.json' file from '/bot/settings.example.json'[/red]"
+        )
+        sys.exit(1)
